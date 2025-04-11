@@ -1,4 +1,4 @@
 require("config.lazy")
 require("config.remaps")
-require("config.system")
+require("config.set")
 
