@@ -4,6 +4,6 @@ return{
         lazy = false,
         keys = {
             {"<leader>ut", "<cmd>UndotreeToggle<cr>", desc = "Undotree Toggle"}
-        } 
+        }
     }
 }

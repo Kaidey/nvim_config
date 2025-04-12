@@ -1,3 +1,12 @@
+vim.g.mapleader = " "
+
+vim.diagnostic.config({
+    virtual_text = true,  -- Show diagnostics as virtual text
+    signs = true,         -- Show signs in the sign column
+    update_in_insert = false,  -- Update diagnostics while typing
+    underline = true,     -- Underline parts of the code with errors/warnings
+})
+
 -- Line numbers
 vim.opt.nu = true
 vim.opt.relativenumber = true
@@ -9,7 +18,6 @@ vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
 
 vim.opt.smartindent = true
-
 -- vim.opt.wrap = false
 
 -- No backups, longer undo history
