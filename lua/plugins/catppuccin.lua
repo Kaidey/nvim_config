@@ -4,11 +4,12 @@ return {
         name = "catppuccin",
         lazy = false,
         priority = 1000,
-        config = function()
-            require("catppuccin").setup({
+        opts = {
                 flavour = "mocha",
                 transparent_background = true
-            })
+        },
+        config = function(plugin, opts)
+            require("catppuccin").setup(opts)
             vim.cmd.colorscheme "catppuccin"
         end
     }

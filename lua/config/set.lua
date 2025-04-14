@@ -1,4 +1,5 @@
 vim.g.mapleader = " "
+vim.g.maplocalleader = "\\"
 
 vim.diagnostic.config({
     virtual_text = true,  -- Show diagnostics as virtual text
