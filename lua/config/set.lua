@@ -1,13 +1,6 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 
-vim.diagnostic.config({
-    virtual_text = true,  -- Show diagnostics as virtual text
-    signs = true,         -- Show signs in the sign column
-    update_in_insert = false,  -- Update diagnostics while typing
-    underline = true,     -- Underline parts of the code with errors/warnings
-})
-
 -- Line numbers
 vim.opt.nu = true
 vim.opt.relativenumber = true
