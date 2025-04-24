@@ -1,0 +1,4 @@
+- Explore what lazydev actually does
+- Comment support :: DO MYSELF?
+- Status line info (git, cwd, other) :: DO MYSELF?
+- Debugger
