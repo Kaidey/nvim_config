@@ -28,7 +28,6 @@ return {
                         vim.keymap.set(mode, keys, func, { buffer = eventAttach.buf, desc = "LSP: " .. desc })
                     end
 
-                    map("ff", vim.lsp.formatexpr, "Format")
                     map("lk", vim.lsp.buf.hover, "Hover")
                     map("lrn", vim.lsp.buf.rename, "Rename variable")
                     map("lca", vim.lsp.buf.code_action, "Code Action")
@@ -73,11 +72,12 @@ return {
 
             -- ### LSP SERVER CONFIGS ###
             local servers = {
-                    lua_ls = require("lsp.lua_ls")
-                    -- yaml
-                    -- json
-                    -- html
-                    -- css 
+                lua_ls =
+                    require("lsp.lua_ls")
+                -- yaml
+                -- json
+                -- html
+                -- css
             }
 
             -- ### LSP Setup ###
@@ -85,13 +85,14 @@ return {
 
             require("mason-lspconfig").setup {
                 -- make sure the listed LSP servers are installed on setup
-                ensure_installed = {"lua_ls"},
+                ensure_installed = { "lua_ls" },
                 automatic_installation = true,
                 handlers = {
                     function(server_name)
                         local serverConfig = servers[server_name] or {}
                         -- Override blink.cmp capabilities with configured server capabilities. Force uses value from right-most table
-                        serverConfig.capabilities = vim.tbl_deep_extend("force", {}, capabilities, serverConfig.capabilities or {})
+                        serverConfig.capabilities = vim.tbl_deep_extend("force", {}, capabilities,
+                            serverConfig.capabilities or {})
                         require("lspconfig")[server_name].setup(serverConfig)
                     end
                 }
