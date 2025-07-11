@@ -28,17 +28,17 @@ return {
                         vim.keymap.set(mode, keys, func, { buffer = eventAttach.buf, desc = "LSP: " .. desc })
                     end
 
-                    map("lk", vim.lsp.buf.hover, "Hover")
-                    map("lrn", vim.lsp.buf.rename, "Rename variable")
-                    map("lca", vim.lsp.buf.code_action, "Code Action")
-                    map("lgD", vim.lsp.buf.declaration, "Goto Declaration")
-                    map("lsh", vim.lsp.buf.signature_help, "Signature Help")
-                    map("lgr", require("telescope.builtin").lsp_references, "Goto References")
-                    map("lgi", require("telescope.builtin").lsp_implementations, "Goto Implementation")
-                    map("lgd", require("telescope.builtin").lsp_definitions, "Goto Definition")
-                    map("lgt", require("telescope.builtin").lsp_type_definitions, "Goto Type Definition")
-                    map("lds", require("telescope.builtin").lsp_document_symbols, "Open Document Symbols")
-                    map("lws", require("telescope.builtin").lsp_dynamic_workspace_symbols, "Open Workspace Symbols")
+                    map("<leader>lk", vim.lsp.buf.hover, "Hover")
+                    map("<leader>lrn", vim.lsp.buf.rename, "Rename variable")
+                    map("<leader>lca", vim.lsp.buf.code_action, "Code Action")
+                    map("<leader>lgD", vim.lsp.buf.declaration, "Goto Declaration")
+                    map("<leader>lsh", vim.lsp.buf.signature_help, "Signature Help")
+                    map("<leader>lgr", require("telescope.builtin").lsp_references, "Goto References")
+                    map("<leader>lgi", require("telescope.builtin").lsp_implementations, "Goto Implementation")
+                    map("<leader>lgd", require("telescope.builtin").lsp_definitions, "Goto Definition")
+                    map("<leader>lgt", require("telescope.builtin").lsp_type_definitions, "Goto Type Definition")
+                    map("<leader>lds", require("telescope.builtin").lsp_document_symbols, "Open Document Symbols")
+                    map("<leader>lws", require("telescope.builtin").lsp_dynamic_workspace_symbols, "Open Workspace Symbols")
                 end
             })
 
@@ -72,8 +72,8 @@ return {
 
             -- ### LSP SERVER CONFIGS ###
             local servers = {
-                lua_ls =
-                    require("lsp.lua_ls")
+                lua_ls = require("lsp.lua_ls"),
+                rust_analyzer = require("lsp.rust_analyzer")
                 -- yaml
                 -- json
                 -- html
@@ -85,7 +85,7 @@ return {
 
             require("mason-lspconfig").setup {
                 -- make sure the listed LSP servers are installed on setup
-                ensure_installed = { "lua_ls" },
+                ensure_installed = { "lua_ls", "rust_analyzer" },
                 automatic_installation = true,
                 handlers = {
                     function(server_name)
