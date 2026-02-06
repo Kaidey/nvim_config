@@ -38,7 +38,8 @@ return {
                     map("<leader>lgd", require("telescope.builtin").lsp_definitions, "Goto Definition")
                     map("<leader>lgt", require("telescope.builtin").lsp_type_definitions, "Goto Type Definition")
                     map("<leader>lds", require("telescope.builtin").lsp_document_symbols, "Open Document Symbols")
-                    map("<leader>lws", require("telescope.builtin").lsp_dynamic_workspace_symbols, "Open Workspace Symbols")
+                    map("<leader>lws", require("telescope.builtin").lsp_dynamic_workspace_symbols,
+                        "Open Workspace Symbols")
                 end
             })
 
@@ -55,20 +56,11 @@ return {
                         [vim.diagnostic.severity.HINT] = '󰌶 ',
                     },
                 } or {},
-                virtual_text = {
-                    source = "if_many",
-                    spacing = 2,
-                    format = function(diagnostic)
-                        local diagnostic_message = {
-                            [vim.diagnostic.severity.ERROR] = diagnostic.message,
-                            [vim.diagnostic.severity.WARN] = diagnostic.message,
-                            [vim.diagnostic.severity.INFO] = diagnostic.message,
-                            [vim.diagnostic.severity.HINT] = diagnostic.message,
-                        }
-                        return diagnostic_message[diagnostic.severity]
-                    end
-                },
+                virtual_text = false,
             }
+            -- Make diagnostics showup in a box on hover instead of inline virtual text
+            vim.o.updatetime = 250
+            vim.cmd [[autocmd CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, {focus=false})]]
 
             -- ### LSP SERVER CONFIGS ###
             local servers = {
