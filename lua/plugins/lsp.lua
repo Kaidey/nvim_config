@@ -1,33 +1,49 @@
 return {
-    {
-        'folke/lazydev.nvim',
-        ft = 'lua',
-        opts = {
-            library = {
-                -- Load luvit types when the `vim.uv` word is found
-                { path = '${3rd}/luv/library', words = { 'vim%.uv' } },
-            },
-        },
-    },
-    {
-        "neovim/nvim-lspconfig",
-        dependencies = {
-            { "williamboman/mason.nvim", opts = {} },
-            "williamboman/mason-lspconfig.nvim",
-            "saghen/blink.cmp",
+    "neovim/nvim-lspconfig",
+    dependencies = {
+        { "williamboman/mason.nvim", opts = {} },
+        "williamboman/mason-lspconfig.nvim",
+        "saghen/blink.cmp",
 
-        },
-        config = function()
-            -- ### AUTOCMD ###
-            -- Create keybinds on Attach
-            vim.api.nvim_create_autocmd("LspAttach", {
+    },
+    config = function()
+        local blinkcmp_capabilities = require("blink.cmp").get_lsp_capabilities()
+        local lang_server_configs = {
+            lua_ls = require("lsp.lua_ls"),
+            rust_analyzer = require("lsp.rust_analyzer")
+        }
+
+        ----------------------------------------------------
+        -- Merge default configs with custom configs
+        ----------------------------------------------------
+        for sv_name, sv_config in pairs(lang_server_configs) do
+            local config = vim.lsp.config[sv_name]
+            config.capabilities = vim.tbl_deep_extend("force", config.capabilities or {},
+                blinkcmp_capabilities or {}, sv_config.capabilities or {})
+            config.settings = vim.tbl_deep_extend("force", {}, config.settings or {},
+                sv_config.settings or {})
+            vim.lsp.config[sv_name] = config
+        end
+
+        ----------------------------------------------------
+        -- Make sure lsp servers are always installed
+        ----------------------------------------------------
+        require("mason-lspconfig").setup {
+            ensure_installed = vim.tbl_keys(lang_server_configs),
+        }
+
+
+        ----------------------------------------------------
+        -- AutoCMD
+        ----------------------------------------------------
+        vim.api.nvim_create_autocmd("LspAttach",
+            {
                 group = vim.api.nvim_create_augroup("lsp", { clear = true }),
-                callback = function(eventAttach)
+                callback = function(event)
                     local map = function(keys, func, desc, mode)
                         mode = mode or "n"
-                        vim.keymap.set(mode, keys, func, { buffer = eventAttach.buf, desc = "LSP: " .. desc })
+                        vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = "LSP: " .. desc, })
                     end
-
                     map("<leader>lk", vim.lsp.buf.hover, "Hover")
                     map("<leader>lrn", vim.lsp.buf.rename, "Rename variable")
                     map("<leader>lca", vim.lsp.buf.code_action, "Code Action")
@@ -37,58 +53,9 @@ return {
                     map("<leader>lgi", require("telescope.builtin").lsp_implementations, "Goto Implementation")
                     map("<leader>lgd", require("telescope.builtin").lsp_definitions, "Goto Definition")
                     map("<leader>lgt", require("telescope.builtin").lsp_type_definitions, "Goto Type Definition")
-                    map("<leader>lds", require("telescope.builtin").lsp_document_symbols, "Open Document Symbols")
-                    map("<leader>lws", require("telescope.builtin").lsp_dynamic_workspace_symbols,
-                        "Open Workspace Symbols")
-                end
+                    map("<leader>lds", require("telescope.builtin").lsp_document_symbols, "Document Symbols")
+                    map("<leader>lws", require("telescope.builtin").lsp_dynamic_workspace_symbols, "Workspace Symbols")
+                end,
             })
-
-            -- ### DIAGNOSTICS CONFIG ###
-            vim.diagnostic.config {
-                severity_sort = true,
-                float = { border = "rounded", source = "if_many" },
-                underline = { severity = vim.diagnostic.severity.ERROR },
-                signs = vim.g.have_nerd_font and {
-                    text = {
-                        [vim.diagnostic.severity.ERROR] = '󰅚 ',
-                        [vim.diagnostic.severity.WARN] = '󰀪 ',
-                        [vim.diagnostic.severity.INFO] = '󰋽 ',
-                        [vim.diagnostic.severity.HINT] = '󰌶 ',
-                    },
-                } or {},
-                virtual_text = false,
-            }
-            -- Make diagnostics showup in a box on hover instead of inline virtual text
-            vim.o.updatetime = 250
-            vim.cmd [[autocmd CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, {focus=false})]]
-
-            -- ### LSP SERVER CONFIGS ###
-            local servers = {
-                lua_ls = require("lsp.lua_ls"),
-                rust_analyzer = require("lsp.rust_analyzer")
-                -- yaml
-                -- json
-                -- html
-                -- css
-            }
-
-            -- ### LSP Setup ###
-            local capabilities = require("blink.cmp").get_lsp_capabilities()
-
-            require("mason-lspconfig").setup {
-                -- make sure the listed LSP servers are installed on setup
-                ensure_installed = { "lua_ls", "rust_analyzer" },
-                automatic_installation = true,
-                handlers = {
-                    function(server_name)
-                        local serverConfig = servers[server_name] or {}
-                        -- Override blink.cmp capabilities with configured server capabilities. Force uses value from right-most table
-                        serverConfig.capabilities = vim.tbl_deep_extend("force", {}, capabilities,
-                            serverConfig.capabilities or {})
-                        require("lspconfig")[server_name].setup(serverConfig)
-                    end
-                }
-            }
-        end
-    },
+    end
 }

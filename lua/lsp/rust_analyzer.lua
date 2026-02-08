@@ -1,5 +1,12 @@
-local M = {}
-
-M = {
-
+return {
+    pattern = "rust",
+    settings = {
+        ["rust-analyzer"] = {
+            diagnostics = {
+                disabled = {
+                    "unlinked-file"
+                },
+            },
+        },
+    },
 }
