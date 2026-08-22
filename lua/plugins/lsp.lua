@@ -10,7 +10,10 @@ return {
         local blinkcmp_capabilities = require("blink.cmp").get_lsp_capabilities()
         local lang_server_configs = {
             lua_ls = require("lsp.lua_ls"),
-            rust_analyzer = require("lsp.rust_analyzer")
+            rust_analyzer = require("lsp.rust_analyzer"),
+            html = require("lsp.html"),
+            cssls = require("lsp.cssls"),
+            ts_ls = require("lsp.ts_ls")
         }
 
         ----------------------------------------------------
