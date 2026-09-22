@@ -1,11 +1,12 @@
-return {
+    return {
     {
         "nvim-treesitter/nvim-treesitter",
         lazy = false,
+        branch = "main",
         build = ":TSUpdate",
-        main = "nvim-treesitter.configs",
+        main = "nvim-treesitter.config",
         opts = {
-            ensure_installed = { "go", "javascript", "typescript", "html", "json", "yaml", "powershell" },
+            ensure_installed = { "rust", "lua", "javascript", "typescript", "html", "json", "yaml", "powershell" },
             sync_install = false,
             highlight = { enable = true },
             indent = { enable = true },
