@@ -53,6 +53,7 @@ vim.opt.clipboard = unnamedplus
 --   })
 --   end
 
+
 -----------------------------------------
 -- Vim diagnostics setup
 -----------------------------------------
